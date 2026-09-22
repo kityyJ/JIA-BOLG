@@ -1,0 +1,16 @@
+# GitHub Linguist language classification
+
+# Correct legacy/misnamed HTML files
+html/1.1html linguist-language=HTML
+*.html linguist-language=HTML
+
+# Count project JavaScript normally
+assets/js/index.js linguist-language=JavaScript
+
+# Third-party library: keep it out of repository language statistics
+assets/js/jquery.js linguist-vendored
+
+# Legacy/non-source files should not affect the language bar
+*.rtf linguist-detectable=false
+*.txt linguist-detectable=false
+*.TXT linguist-detectable=false

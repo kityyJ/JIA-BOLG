@@ -1,103 +1,132 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="C:\Users\yilem\Desktop\css\app.css"> <!-- 引入外部CSS文件 -->
- 
-
-    <title>auv699</title>
-    <style>
-        /* 全屏背景视频样式 */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            text-align: center;
-        }
-
-        /* 视频背景 */
-        .video-background {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover; /* 自动裁剪并填充屏幕 */
-            transform: translate(-50%, -50%); /* 确保视频居中 */
-            z-index: -1;
-        }
-
-        /* 中间链接样式 */
-        .content {
-            z-index: 1;
-        }
-        .content a {
-            display: block;
-            font-size: 2rem;
-            margin: -10rem;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            background-color: rgba(0 0 0 / 0%);
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-        .content a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-@font-face {
-    font-family: 'HYTiaoTiao';
-    src: url('https://www.yilemo.com/assets/font/HYTiaoTiao.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@keyframes blink {
-    0% {
-        opacity: 1;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="C:\Users\yilem\Desktop\css\app.css" />
+  <title>auv699</title>
+  <style>
+    /* 全局样式 */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden; /* 禁止下拉滚动 */
+      background: linear-gradient(135deg, #98fcf8, #fe496b, #d0e8ec, #faaca8);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
     }
-    0% {
-        opacity: 0;
-    }
-   0% {
-        opacity: 1;
-    }
-}
 
-h3 {
-    font-family: 'HYTiaoTiao', 'Microsoft YaHei UI', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 1.5;
-    background: linear-gradient(to right, rgb(152,252,248,190),rgb(254,73,107,228),rgb(208,232,236),rgb(250, 172, 168));
-    -webkit-background-clip: text;
-    color: transparent; /* Ensure text color is transparent to show gradient */
-    animation: blink 1s infinite;
-}
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-    </style>
+    /* 卡片容器 */
+    .card {
+      position: relative;
+      width: 90vw;
+      max-width: 400px;
+      padding: 2rem 1.5rem;
+      border-radius: 16px;
+      overflow: hidden;
+      color: white;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 卡片背景视频 */
+    .card video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.85;
+    }
+
+    /* 卡片内容层 */
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    h3 {
+      font-family: 'HYTiaoTiao', 'Microsoft YaHei UI', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.5;
+      background: linear-gradient(to right, rgba(152,252,248,0.9), rgba(254,73,107,0.9), rgba(208,232,236,0.9), rgba(250, 172, 168, 0.9));
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .card-content a {
+      display: inline-block;
+      margin-top: 1rem;
+      text-decoration: none;
+    }
+
+    .card-content img {
+      width: 36px;
+      transition: transform 0.3s ease;
+    }
+
+    .card-content img:hover {
+      transform: scale(1.2);
+    }
+
+    /* 自定义字体 */
+    @font-face {
+      font-family: 'HYTiaoTiao';
+      src: url('https://www.yilemo.com/assets/font/HYTiaoTiao.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 移动端优化 */
+    @media (max-width: 480px) {
+      h3 {
+        font-size: 18px;
+      }
+      .card {
+        padding: 1.5rem 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- 背景视频 -->
-    <video autoplay loop muted class="video-background">
-        <source src=https://www.yilemo.com/html/mp4/jiaCF6AA3B80.mp4
-" type="video/mp4">
-        您的浏览器不支持 HTML5 
+  <div class="card">
+    <!-- 卡片背景视频 -->
+    <video autoplay loop muted playsinline>
+      <source src="https://img-etq.pages.dev/2d876194484100c540d904284c02ae63.MP4" type="video/mp4">
+      您的浏览器不支持视频播放
     </video>
-    <!-- 内容区域 -->
-    <div class="content">
- <h3>她的温存如影随形难以从心底褪去</h3>
-<a href="https://v.douyin.com/iAua8F3s/" target="_blank">
-    <img src="https://lf-douyin-pc-web.douyinstatic.com/obj/douyin-pc-web/ies/douyin_web/media/logo-horizontal-small-dark.04fa81ed0b1d6d5e.svg" alt="抖音" style="width:36px;">
-</a>      
-</div>
+
+    <!-- 卡片内容 -->
+    <div class="card-content">
+      <h3>她的温存如影随形难以从心底褪去</h3>
+      <a href="https://v.douyin.com/iAua8F3s/" target="_blank">
+        <img src="https://lf-douyin-pc-web.douyinstatic.com/obj/douyin-pc-web/ies/douyin_web/media/logo-horizontal-small-dark.04fa81ed0b1d6d5e.svg" alt="抖音">
+      </a>
+    </div>
+  </div>
 </body>
 </html>

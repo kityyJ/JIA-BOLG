@@ -1,163 +1,335 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WWW.yilemo.com/ip</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            width: 400px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-        }
-        .logo {
-            margin-bottom: 20px;
-        }
-        .logo img {
-            width: 100px;
-        }
-        .title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #0066cc;
-        }
-        .menu {
-            margin: 20px 0;
-        }
-        .menu button {
-            background-color: #0066cc;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-        .input-field {
-            margin: 20px 0;
-        }
-        .input-field input {
-            padding: 10px;
-            width: 250px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .input-field button {
-            background-color: #0066cc;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .result {
-            background-color: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .result p {
-            margin: 10px 0;
-        }
-        .result .ip-address {
-            color: #ff3333;
-            font-weight: bold;
-        }
-        .footer {
-            font-size: 12px;
-            color: #999;
-        }
-        .footer a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-    </style>
-    <script>
-        // 获取用户的IP地址和详细信息
-        function getUserIPInfo() {
-            fetch('https://ipinfo.io/json?token=72b16df61bd888')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('user-ip-address').innerText = data.ip;
-                    document.getElementById('user-location').innerText = `${data.city}, ${data.region}, ${data.country}`;
-                    document.getElementById('user-isp').innerText = data.org;
-                })
-                .catch(error => {
-                    console.error('Error fetching the user IP information:', error);
-                });
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="查看当前 IP 或查询指定 IP 的公开网络信息。">
+  <title>IP 查询 · JIA-BOLG</title>
+  <link rel="icon" href="./favicon.ico">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #0b0d12;
+      --muted: #6b707a;
+      --line: #dfe1e5;
+      --accent: #92ff4f;
+      --page: #f4f5f6;
+      --surface: #ffffff;
+      --danger: #b42318;
+    }
 
-        // 查询输入IP地址的详细信息
-        function queryIP() {
-            const ip = document.getElementById('ip-input').value;
-            if (!ip) {
-                alert('请输入一个有效的IP地址！');
-                return;
-            }
+    * { box-sizing: border-box; }
+    html { min-width: 320px; }
 
-            fetch(`https://ipinfo.io/${ip}/json?token=72b16df61bd888`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('query-ip-address').innerText = data.ip;
-                    document.getElementById('query-location').innerText = `${data.city}, ${data.region}, ${data.country}`;
-                    document.getElementById('query-isp').innerText = data.org;
-                })
-                .catch(error => {
-                    console.error('Error fetching the IP information:', error);
-                    alert('无法获取该IP的详细信息，请检查输入的IP是否有效。');
-                });
-        }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      padding: 14px;
+      color: var(--ink);
+      background: var(--page);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        // 页面加载后自动获取用户的IP信息
-        window.onload = getUserIPInfo;
-    </script>
+    .page {
+      width: min(1100px, 100%);
+      min-height: calc(100svh - 28px);
+      margin: 0 auto;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid rgba(11, 13, 18, .08);
+      border-radius: 22px;
+      box-shadow: 0 12px 38px rgba(16, 20, 28, .08);
+    }
+
+    .site-header {
+      min-height: 88px;
+      padding: 0 clamp(24px, 5vw, 56px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      color: var(--ink);
+      font-size: 29px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: .08em;
+      text-decoration: none;
+    }
+
+    .back-link {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 650;
+      text-underline-offset: 5px;
+    }
+
+    main {
+      width: min(950px, 100%);
+      margin: 0 auto;
+      padding: clamp(48px, 7vw, 76px) clamp(24px, 6vw, 64px) 72px;
+    }
+
+    h1 {
+      margin: 0 0 50px;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.05;
+      letter-spacing: -.04em;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: 21px;
+      line-height: 1.3;
+    }
+
+    .data-block { margin-bottom: 40px; }
+
+    .data-list {
+      margin: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .data-row {
+      min-height: 56px;
+      display: grid;
+      grid-template-columns: minmax(110px, 23%) 1fr;
+      align-items: center;
+      gap: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    dt, dd { margin: 0; }
+    dt { color: var(--muted); font-size: 15px; }
+    dd { font-size: 16px; overflow-wrap: anywhere; }
+
+    .query-section {
+      padding-top: 2px;
+      margin-bottom: 42px;
+    }
+
+    .query-form {
+      display: grid;
+      grid-template-columns: 1fr 168px;
+      gap: 14px;
+    }
+
+    input,
+    button { font: inherit; }
+
+    input {
+      min-width: 0;
+      min-height: 58px;
+      padding: 0 18px;
+      border: 1px solid #cbd0d8;
+      border-radius: 11px;
+      color: var(--ink);
+      background: var(--surface);
+      font-size: 16px;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    input::placeholder { color: #9299a4; }
+
+    input:focus {
+      border-color: #58b91f;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(109, 226, 40, .18);
+    }
+
+    button {
+      min-height: 58px;
+      border: 0;
+      border-radius: 11px;
+      color: var(--ink);
+      background: var(--accent);
+      font-size: 17px;
+      font-weight: 750;
+      cursor: pointer;
+      transition: transform .18s ease, background-color .18s ease;
+    }
+
+    button:hover { transform: translateY(-1px); background: #82f63b; }
+    button:active { transform: translateY(0) scale(.99); }
+    button:disabled { cursor: wait; opacity: .65; transform: none; }
+
+    .hint,
+    .status {
+      min-height: 22px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .status.is-error { color: var(--danger); }
+
+    :focus-visible {
+      outline: 3px solid rgba(68, 176, 8, .42);
+      outline-offset: 4px;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 0; background: var(--surface); }
+
+      .page {
+        min-height: 100svh;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .site-header { min-height: 72px; padding: 0 24px; }
+      .brand { font-size: 20px; letter-spacing: .04em; }
+
+      main { padding: 48px 28px 54px; }
+      h1 { margin-bottom: 42px; font-size: 40px; }
+      h2 { font-size: 19px; }
+
+      .data-row {
+        grid-template-columns: minmax(82px, 34%) 1fr;
+        gap: 18px;
+      }
+
+      .query-form { grid-template-columns: 1fr; }
+      button { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <img src="https://www.yilemo.com/assets/images/favicon.ico" alt="IP.Sanv.org">
-        </div>
-        <div class="title">𝘓·𝘪𝘱𝘘𝘶𝘦𝘳𝘺</div>
-        
+  <div class="page">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="JIA-BOLG 首页">JIA-BOLG</a>
+      <a class="back-link" href="./"><span aria-hidden="true">←</span> 返回首页</a>
+    </header>
 
-        <!-- 用户当前IP信息 -->
-        <div class="result">
-            <h3>您的IP地址信息</h3>
-            <p>IP地址: <span class="ip-address" id="user-ip-address">获取中...</span></p>
-            <p>地理位置: <span id="user-location">获取中...</span></p>
-            <p>ISP: <span id="user-isp">获取中...</span></p>
-        </div>
+    <main>
+      <h1>IP 查询</h1>
 
-        <!-- 输入IP查询功能 -->
-        <div class="input-field">
-            <input type="text" id="ip-input" placeholder="输入要查询的IP地址">
-            <button onclick="queryIP()">查询IP</button>
-        </div>
+      <section class="data-block" aria-labelledby="current-title">
+        <h2 id="current-title">当前 IP</h2>
+        <dl class="data-list">
+          <div class="data-row"><dt>当前 IP</dt><dd id="current-ip">正在获取…</dd></div>
+          <div class="data-row"><dt>位置</dt><dd id="current-location">正在获取…</dd></div>
+          <div class="data-row"><dt>网络</dt><dd id="current-network">正在获取…</dd></div>
+        </dl>
+        <p class="status" id="current-status" role="status" aria-live="polite"></p>
+      </section>
 
-        <!-- 查询结果显示 -->
-        <div class="result">
-            <h3>查询IP地址信息</h3>
-            <p>IP地址: <span class="ip-address" id="query-ip-address">等待查询...</span></p>
-            <p>地理位置: <span id="query-location">等待查询...</span></p>
-            <p>ISP: <span id="query-isp">等待查询...</span></p>
-        </div>
+      <section class="query-section" aria-labelledby="query-title">
+        <h2 id="query-title">查询其他 IP</h2>
+        <form class="query-form" id="query-form">
+          <label for="ip-input" hidden>输入 IP 地址</label>
+          <input id="ip-input" name="ip" type="text" inputmode="text" autocomplete="off" placeholder="输入 IP 地址" aria-describedby="query-hint">
+          <button id="query-button" type="submit">查询</button>
+        </form>
+        <p class="hint" id="query-hint">输入一个 IPv4 或 IPv6 地址以查询其公开网络信息。</p>
+      </section>
 
-        <div class="footer">
-            &copy;2024 www.yilemo.com L·IP查询服务Beta<br>
-            当前版本: 可用
-        </div>
-    </div>
+      <section class="data-block" aria-labelledby="result-title">
+        <h2 id="result-title">查询结果</h2>
+        <dl class="data-list">
+          <div class="data-row"><dt>IP 地址</dt><dd id="result-ip">等待查询</dd></div>
+          <div class="data-row"><dt>位置</dt><dd id="result-location">等待查询</dd></div>
+          <div class="data-row"><dt>网络</dt><dd id="result-network">等待查询</dd></div>
+        </dl>
+        <p class="status" id="query-status" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const fields = {
+      current: {
+        ip: document.querySelector('#current-ip'),
+        location: document.querySelector('#current-location'),
+        network: document.querySelector('#current-network')
+      },
+      result: {
+        ip: document.querySelector('#result-ip'),
+        location: document.querySelector('#result-location'),
+        network: document.querySelector('#result-network')
+      }
+    };
+
+    function formatLocation(data) {
+      return [data.country_name, data.region, data.city].filter(Boolean).join(' · ') || '暂无信息';
+    }
+
+    function renderResult(target, data) {
+      fields[target].ip.textContent = data.ip || '暂无信息';
+      fields[target].location.textContent = formatLocation(data);
+      fields[target].network.textContent = data.org || data.asn || '暂无信息';
+    }
+
+    async function fetchIp(url) {
+      const response = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!response.ok) throw new Error('服务暂时不可用');
+      const data = await response.json();
+      if (data.error) throw new Error(data.reason || '无法查询该 IP');
+      return data;
+    }
+
+    async function loadCurrentIp() {
+      const status = document.querySelector('#current-status');
+      try {
+        const data = await fetchIp('https://ipapi.co/json/');
+        renderResult('current', data);
+      } catch (error) {
+        status.textContent = '暂时无法获取当前 IP，请稍后重试。';
+        status.classList.add('is-error');
+        Object.values(fields.current).forEach((field) => { field.textContent = '获取失败'; });
+      }
+    }
+
+    document.querySelector('#query-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const input = document.querySelector('#ip-input');
+      const button = document.querySelector('#query-button');
+      const status = document.querySelector('#query-status');
+      const ip = input.value.trim();
+
+      status.classList.remove('is-error');
+      if (!ip || !/^[0-9a-fA-F:.]+$/.test(ip)) {
+        status.textContent = '请输入有效的 IPv4 或 IPv6 地址。';
+        status.classList.add('is-error');
+        input.focus();
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = '查询中…';
+      status.textContent = '';
+      Object.values(fields.result).forEach((field) => { field.textContent = '正在获取…'; });
+
+      try {
+        const data = await fetchIp(`https://ipapi.co/${encodeURIComponent(ip)}/json/`);
+        renderResult('result', data);
+        status.textContent = '查询完成。';
+      } catch (error) {
+        Object.values(fields.result).forEach((field) => { field.textContent = '查询失败'; });
+        status.textContent = error.message || '无法查询该 IP，请稍后重试。';
+        status.classList.add('is-error');
+      } finally {
+        button.disabled = false;
+        button.textContent = '查询';
+      }
+    });
+
+    loadCurrentIp();
+  </script>
 </body>
 </html>
