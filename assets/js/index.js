@@ -60,6 +60,4 @@ let soul = [
 
 function randomSoul(){
 	document.getElementsByTagName('article')[0].innerHTML = soul[Math.floor(Math.random() * soul.length)].replace(/\*\*(.*?)\*\*/g,'<mark>$1</mark>');
-	document.getElementsByTagName('section')[0].className = 'border-' + randomNumBoth(1,6);
 }
-

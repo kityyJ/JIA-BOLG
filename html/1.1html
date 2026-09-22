@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自适应记事本</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #editor { width: 90%; height: 400px; border: 1px solid #ccc; padding: 10px; margin-top: 10px; }
+        button { margin: 5px; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>📝 自适应记事本</h2>
+    <div contenteditable="true" id="editor" placeholder="在这里输入内容..."></div>
+
+    <br>
+    <button onclick="saveNote()">💾 保存</button>
+    <button onclick="shareNote()">🔗 生成分享链接</button>
+    <p id="status"></p>
+
+    <script>
+        const editor = document.getElementById("editor");
+
+        // 获取 URL 参数中的 noteId
+        function getNoteIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get("noteId") || "default";  // 默认存储 ID
+        }
+
+        const noteId = getNoteIdFromURL();
+        
+        // 加载存储的笔记
+        function loadNote() {
+            const savedContent = localStorage.getItem("note_" + noteId);
+            if (savedContent) {
+                editor.innerHTML = savedContent;
+            }
+        }
+
+        // 保存笔记
+        function saveNote() {
+            localStorage.setItem("note_" + noteId, editor.innerHTML);
+            document.getElementById("status").innerText = "✅ 笔记已保存！";
+        }
+
+        // 生成分享链接
+        function shareNote() {
+            const uniqueId = Math.random().toString(36).substr(2, 9); // 生成随机ID
+            localStorage.setItem("note_" + uniqueId, editor.innerHTML);
+            const shareURL = window.location.origin + window.location.pathname + "?noteId=" + uniqueId;
+            navigator.clipboard.writeText(shareURL);
+            document.getElementById("status").innerText = "🔗 分享链接已复制！";
+        }
+
+        loadNote();  // 加载笔记
+    </script>
+
+</body>
+</html>
